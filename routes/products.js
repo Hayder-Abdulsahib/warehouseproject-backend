@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const upload = require("../middleware/multer");
+
 const {
   productFetch,
-  productCreate,
   productList,
   productDetail,
   productUpdate,
@@ -22,13 +23,13 @@ router.param("productId", async (req, res, next, productId) => {
   }
 });
 
-router.post("/", productCreate);
+//image in the single is the same name as we named it in the models in the Product.js
 
 router.get("/", productList);
 
 router.get("/:productId", productDetail);
 
-router.put("/:productId", productUpdate);
+router.put("/:productId", upload.single("image"), productUpdate);
 
 router.delete("/:productId", productDelete);
 

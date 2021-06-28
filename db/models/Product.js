@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     slug: {
       type: DataTypes.STRING,
+      unique: true, //this is optional but it prefer to put it
     },
     description: {
       type: DataTypes.STRING,
@@ -20,15 +21,25 @@ module.exports = (sequelize, DataTypes) => {
     },
     image: {
       type: DataTypes.STRING,
-      validate: {
-        isUrl: true,
-      },
+      // validate: {
+      //   isUrl: true,
+      // },
     },
   });
 
   SequelizeSlugify.slugifyModel(Product, {
     source: ["name"],
   });
+
+  Product.associate = (models) => {
+    models.Bakery.hasMany(Product, {
+      foreignKey: "bakeryId",
+      as: "products",
+      alloNull: false,
+    });
+
+    Product.belongsTo(models.Bakery, { foreignKey: "bakeryId" });
+  };
 
   return Product;
 };

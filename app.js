@@ -1,17 +1,28 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 
 // Database
 const db = require("./db/models");
 
 // Routes
 const productRoutes = require("./routes/products");
+const bakeryRoutes = require("./routes/bakeries");
+
+//cors
+const cors = require("cors");
+
+//path
+const path = require("path");
 
 const app = express();
+//we put it at the beganing of the code
+app.use(cors());
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("/products", productRoutes);
+app.use("/bakeries", bakeryRoutes);
+
+app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use((req, res, next) => {
   const err = new Error("Path Not Found");
@@ -27,7 +38,7 @@ app.use((err, req, res, next) => {
 });
 
 const run = async () => {
-  await db.sequelize.sync();
+  // await db.sequelize.sync();
   await app.listen(8000, () => {
     console.log("The application is running on localhost:8000");
   });

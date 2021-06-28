@@ -1,11 +1,13 @@
 {
   "development": {
-    "username": "whalez",
-    "password": null,
+    "username": "postgres",
+    "password": "1234",
     "database": "taskapp_db",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "logging": false
+    "logging" : false ,
+    "_comment for loggings": "this command is used to delete the extra word that comes when you run the project"
+    
   },
   "test": {
     "username": "root",
