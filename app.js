@@ -6,6 +6,7 @@ const db = require("./db/models");
 // Routes
 const productRoutes = require("./routes/products");
 const bakeryRoutes = require("./routes/bakeries");
+const userRoutes = require("./routes/users");
 
 //cors
 const cors = require("cors");
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use("/products", productRoutes);
 app.use("/bakeries", bakeryRoutes);
+app.use(userRoutes);
 
 app.use("/media", express.static(path.join(__dirname, "media")));
 

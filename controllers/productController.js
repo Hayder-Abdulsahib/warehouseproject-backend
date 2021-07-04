@@ -10,18 +10,6 @@ exports.productFetch = async (productId, next) => {
   }
 };
 
-exports.productCreate = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
-    }
-    const newProduct = await Product.create(req.body);
-    res.status(201).json(newProduct);
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.productList = async (req, res, next) => {
   try {
     const products = await Product.findAll({
