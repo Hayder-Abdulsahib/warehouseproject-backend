@@ -14,11 +14,18 @@ const cors = require("cors");
 //path
 const path = require("path");
 
+//passport
+const passport = require("passport");
+const { localStrategy } = require("./middleware/passport");
+
 const app = express();
 //we put it at the beganing of the code
 app.use(cors());
 
 app.use(express.json());
+
+app.use(passport.initialize()); //it must be before the routes
+passport.use(localStrategy);
 
 app.use("/products", productRoutes);
 app.use("/bakeries", bakeryRoutes);
