@@ -3,6 +3,8 @@ const router = express.Router();
 
 const upload = require("../middleware/multer");
 
+const passport = require("passport");
+
 const {
   productFetch,
   productList,
@@ -11,9 +13,14 @@ const {
   productDelete,
 } = require("../controllers/productController");
 
+const { bakeryFetch } = require("../controllers/bakeryController");
+
 router.param("productId", async (req, res, next, productId) => {
   const product = await productFetch(productId, next);
+
   if (product) {
+    const bakery = await bakeryFetch(product.bakeryId, next);
+    req.bakery = bakery;
     req.product = product;
     next();
   } else {
@@ -29,8 +36,17 @@ router.get("/", productList);
 
 router.get("/:productId", productDetail);
 
-router.put("/:productId", upload.single("image"), productUpdate);
+router.put(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productUpdate
+);
 
-router.delete("/:productId", productDelete);
+router.delete(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  productDelete
+);
 
 module.exports = router;

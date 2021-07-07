@@ -16,5 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   SequelizeSlugify.slugifyModel(Bakery, {
     source: ["name"],
   });
+
+  Bakery.associate = (models) => {
+    models.User.hasMany(Bakery, {
+      foreignKey: "userId",
+      alloNull: false,
+    });
+
+    Bakery.belongsTo(models.User, { foreignKey: "userId" });
+  };
+
   return Bakery;
 };

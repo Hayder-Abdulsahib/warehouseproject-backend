@@ -15,6 +15,7 @@ exports.bakeryCreate = async (req, res, next) => {
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
+    req.body.userId = req.user.id;
     const newBakery = await Bakery.create(req.body);
     res.status(201).json(newBakery);
   } catch (error) {
@@ -24,6 +25,12 @@ exports.bakeryCreate = async (req, res, next) => {
 
 exports.productCreate = async (req, res, next) => {
   try {
+    if (req.bakery.userId !== req.user.id) {
+      throw {
+        status: 401,
+        message: "you can't add coockies to a bakery that not yours",
+      };
+    }
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }

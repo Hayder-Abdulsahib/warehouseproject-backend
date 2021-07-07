@@ -3,6 +3,8 @@ const router = express.Router();
 
 const upload = require("../middleware/multer");
 
+const passport = require("passport");
+
 const {
   bakeryFetch,
   bakeryCreate,
@@ -26,9 +28,19 @@ router.param("bakeryId", async (req, res, next, bakeryId) => {
 });
 
 //image in the single is the same name as we named it in the models in the Product.js
-router.post("/", upload.single("image"), bakeryCreate);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  bakeryCreate
+);
 
-router.post("/:bakeryId/products", upload.single("image"), productCreate);
+router.post(
+  "/:bakeryId/products",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productCreate
+);
 
 router.get("/", bakeryList);
 
